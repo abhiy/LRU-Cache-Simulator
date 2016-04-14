@@ -1,6 +1,5 @@
 #include <iostream>
 #include "l1.h"
-#include "func.h"
 
 using namespace std;
 
@@ -13,9 +12,9 @@ l1::l1(int size, int sets, int blockSize){
 
 //Called by the processor to perform r/w
 void l1::access(string addr, cache *Cache){
-	string bitstring = getBits(addr);                //Convert hex string to binary string
- 	int index = getIndex(bitstring);                 //Index to determine which set to go to
- 	string tag = getTag(bitstring);			   	     //The tag
+	string bitstring = getBits(addr);     //Convert hex string to binary string
+ 	int index = getIndex(bitstring, Cache->L1);      //Index to determine which set to go to
+ 	string tag = getTag(bitstring, Cache->L1);	     //The tag
 
  	set<string>::iterator it;
  	it =_l1[index].find(tag);  						 //Indexing into the l1 cache and finding the tag
@@ -25,7 +24,7 @@ void l1::access(string addr, cache *Cache){
  	}
  	else  											 //A cache miss!
  	{
- 		Cache->l2.Access(bitstring, Cache);      	 //Try to find the block in l2 
+ 		Cache->L2.Access(bitstring, Cache);      	 //Try to find the block in l2 
  	}
 }
 
@@ -37,8 +36,8 @@ void l1::updateList(int index, string tag){
 
 //Called by l2 when it evicts a block
 void l1::removeL2_block(string bitstring, cache *Cache){
-	int index = getIndex(bitstring);
-	string tag = getTag(bitstring);
+	int index = getIndex(bitstring, Cache->L1);
+	string tag = getTag(bitstring, Cache->L1);
 
 	set<string>::iterator it;
  	it =_l2[index].find(tag);             
@@ -62,8 +61,8 @@ void l1::runReplacement(int index, string tag){
 
 //Called by l2 to pass down the block missed
 void l1::insertL2_block(string bitstring){
-	int index = getIndex(bitstring);
-	string tag = getTag(bitstring);
+	int index = getIndex(bitstring, Cache->L1);
+	string tag = getTag(bitstring, Cache->L1);
 
 	if(_l1[index].size() < _ways)
 	{

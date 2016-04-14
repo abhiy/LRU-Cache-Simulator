@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <string>
+#include <stream>
 
 #include "l1.h"
 #include "l2.h"
@@ -21,5 +22,15 @@ public:
 	cache(): L1(32, 64, 64), L2(256, 512, 64), L3(2048, 2048, 64), missCount(0) {}
 };
 
+void cache::simulate(string filename){
+	ifstream inputfile(filename);
+	string addr;
+	string delim;
+	while(!inputfile.eof()){
+		inputfile >> addr;
+		inputfile >> delim;
+		this->L1(addr);
+	}
+}
 #endif
 

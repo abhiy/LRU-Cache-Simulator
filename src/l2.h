@@ -8,6 +8,7 @@
 #include <list>
 
 #include "cache.h"
+#include "func.h"
 
 using namespace std;
 

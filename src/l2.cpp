@@ -1,7 +1,5 @@
 #include <iostream>
-#include "l1.h"
 #include "l2.h"
-#include "l3.h"
 using namespace std;
 
 //Constructor
@@ -14,19 +12,19 @@ l2::l2(int size, int sets, int blockSize){
 
 //Called by l1 on a miss
 void l2::access(string bitstring, cache *Cache){
- 	int index = getIndex(bitstring);                 //Index to determine which set to go to
- 	string tag = getTag(bitstring);			   	     //The tag
+ 	int index = getIndex(bitstring, Cache->L2);                 //Index to determine which set to go to
+ 	string tag = getTag(bitstring, Cache->L2);			   	     //The tag
 
  	set<string>::iterator it;
  	it =_l2[index].find(tag);  						 //Indexing into the l1 cache and finding the tag
  	if(it != _l2[index].end() )                      //A cache hit! 
  	{
  		updateList(index, tag);						 //Make this line MRU
- 		Cache->l1.insertL2_block(bitstring)          //Send block down to l1   
+ 		Cache->L1.insertL2_block(bitstring)          //Send block down to l1   
  	}
  	else  											 //A cache miss!
  	{
- 		Cache->l3.Access(bitstring, Cache);      	 //Try to find the block in l2 
+ 		Cache->L3.Access(bitstring, Cache);      	 //Try to find the block in l2 
  	}
 }
 
@@ -46,8 +44,8 @@ string l2::runReplacement(int index, string tag){
 
 //Called by l3 when it evicts a block
 void l2::removeL3_block(string bitstring, cache *Cache){
-	int index = getIndex(bitstring);
-	string tag = getTag(bitstring);
+	int index = getIndex(bitstring, Cache->L2);
+	string tag = getTag(bitstring, Cache->L2);
 
 	set<string>::iterator it;
  	it =_l2[index].find(tag);             
@@ -55,7 +53,7 @@ void l2::removeL3_block(string bitstring, cache *Cache){
  	{
  		_l2[index].erase(it);
  		lru[index].remove(tag);
- 		Cache->l1.removeL2_block(bitstring, Cache);
+ 		Cache->L1.removeL2_block(bitstring, Cache);
  	}
 
  	//else do nothing
@@ -63,8 +61,8 @@ void l2::removeL3_block(string bitstring, cache *Cache){
 
 //Called by l3 to pass down the block missed
 void l2::insertL3_block(string bitstring, cache *Cache){
-	int index = getIndex(bitstring);
-	string tag = getTag(bitstring);
+	int index = getIndex(bitstring, Cache->L2);
+	string tag = getTag(bitstring, Cache->L2);
 
 	if(_l1[index].size() < _ways)
 	{
@@ -74,10 +72,10 @@ void l2::insertL3_block(string bitstring, cache *Cache){
 	else
 	{
 		string _bitstring = runReplacement(index, tag);
-		Cache->l1.removeL2_block(_bitstring);
+		Cache->L1.removeL2_block(_bitstring);
 	}
 
-	Cache->l1.insertL2_block(bitstring);
+	Cache->L1.insertL2_block(bitstring);
 }
 
 //Find tag, bring it to front

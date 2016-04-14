@@ -1,6 +1,4 @@
 #include <iostream>
-#include "l1.h"
-#include "l2.h"
 #include "l3.h"
 using namespace std;
 
@@ -13,8 +11,8 @@ l3::l3(int size, int sets, int blockSize){
 
 //Called by l2 on a miss
 void l3::access(string bitstring, cache *Cache){
- 	int index = getIndex(bitstring);                 //Index to determine which set to go to
- 	string tag = getTag(bitstring);			   	     //The tag
+ 	int index = getIndex(bitstring, Cache->L3);      //Index to determine which set to go to
+ 	string tag = getTag(bitstring, Cache->L3);		 //The tag
 
  	set<string>::iterator it;
  	it =_l3[index].find(tag);  						 //Indexing into the l1 cache and finding the tag
@@ -31,11 +29,11 @@ void l3::access(string bitstring, cache *Cache){
  		else
  		{
  			string _bitstring = runReplacement(index, tag);
- 			Cache->l2.removeL3_block(_bitstring);
+ 			Cache->L2.removeL3_block(_bitstring);
  		}
  	}	 
 
- 	Cache->l2.insertL3_block(bitstring, Cache)       //Send block down to l2 
+ 	Cache->L2.insertL3_block(bitstring, Cache)       //Send block down to l2 
 }
 
 //Replaces the lru block with the new and returns the bitstring of that lru
