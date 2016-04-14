@@ -12,4 +12,6 @@ int main(){
 	cache Cache;
 
 	Cache.simulate(fileName);
+
+	cout << Cache.missCount << endl;
 }

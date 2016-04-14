@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include <stream>
+#include <iomanip>
 
 #include "l1.h"
 #include "l2.h"
@@ -24,12 +25,12 @@ public:
 
 void cache::simulate(string filename){
 	ifstream inputfile(filename);
-	string addr;
+	unsigned long addr;
 	string delim;
 	while(!inputfile.eof()){
-		inputfile >> addr;
+		inputfile >> hex >> addr;
 		inputfile >> delim;
-		this->L1(addr);
+		this->L1.access(addr);
 	}
 }
 #endif

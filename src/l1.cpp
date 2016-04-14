@@ -11,7 +11,7 @@ l1::l1(int size, int sets, int blockSize){
 }
 
 //Called by the processor to perform r/w
-void l1::access(string addr, cache *Cache){
+void l1::access(unsigned long addr, cache *Cache){
 	string bitstring = getBits(addr);     //Convert hex string to binary string
  	int index = getIndex(bitstring, Cache->L1);      //Index to determine which set to go to
  	string tag = getTag(bitstring, Cache->L1);	     //The tag
