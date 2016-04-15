@@ -1,0 +1,115 @@
+In file included from l1.h:11:0,
+                 from cache.h:9,
+                 from main.cpp:3:
+l2.h:13:8: error: ‘cache’ does not name a type
+ extern cache Cache;
+        ^
+In file included from cache.h:9:0,
+                 from main.cpp:3:
+l1.h:14:8: error: ‘cache’ does not name a type
+ extern cache Cache;
+        ^
+In file included from cache.h:11:0,
+                 from main.cpp:3:
+l3.h:13:8: error: ‘cache’ does not name a type
+ extern cache Cache;
+        ^
+In file included from l1.h:11:0,
+                 from cache.h:9,
+                 from cache.cpp:2:
+l2.h:13:8: error: ‘cache’ does not name a type
+ extern cache Cache;
+        ^
+In file included from cache.h:9:0,
+                 from cache.cpp:2:
+l1.h:14:8: error: ‘cache’ does not name a type
+ extern cache Cache;
+        ^
+In file included from cache.h:11:0,
+                 from cache.cpp:2:
+l3.h:13:8: error: ‘cache’ does not name a type
+ extern cache Cache;
+        ^
+In file included from cache.h:11:0,
+                 from l2.h:11,
+                 from l1.h:11,
+                 from l1.cpp:2:
+l3.h:13:8: error: ‘cache’ does not name a type
+ extern cache Cache;
+        ^
+In file included from l2.h:11:0,
+                 from l1.h:11,
+                 from l1.cpp:2:
+cache.h:17:2: error: ‘l1’ does not name a type
+  l1 *L1;
+  ^
+cache.h:18:2: error: ‘l2’ does not name a type
+  l2 *L2;
+  ^
+l1.cpp: In member function ‘void l1::access(long unsigned int)’:
+l1.cpp:34:9: error: base operand of ‘->’ has non-pointer type ‘cache’
+    Cache->L2->access(bitstring, Cache);        //Try to find the block in l2 
+         ^
+In file included from cache.h:9:0,
+                 from l2.h:11,
+                 from l2.cpp:2:
+l1.h:14:8: error: ‘cache’ does not name a type
+ extern cache Cache;
+        ^
+l1.h:27:3: error: ‘l2’ does not name a type
+   l2 *L2;
+   ^
+In file included from cache.h:11:0,
+                 from l2.h:11,
+                 from l2.cpp:2:
+l3.h:13:8: error: ‘cache’ does not name a type
+ extern cache Cache;
+        ^
+In file included from l2.h:11:0,
+                 from l2.cpp:2:
+cache.h:18:2: error: ‘l2’ does not name a type
+  l2 *L2;
+  ^
+l2.cpp: In member function ‘void l2::access(std::string)’:
+l2.cpp:30:9: error: base operand of ‘->’ has non-pointer type ‘cache’
+    Cache->L1->insertL2_block(bitstring, Cache);         //Send block down to l1   
+         ^
+l2.cpp:34:9: error: base operand of ‘->’ has non-pointer type ‘cache’
+    Cache->L3->access(bitstring, Cache);          //Try to find the block in l2 
+         ^
+l2.cpp: In member function ‘void l2::removeL3_block(std::string)’:
+l2.cpp:63:9: error: base operand of ‘->’ has non-pointer type ‘cache’
+    Cache->L1->removeL2_block(bitstring);
+         ^
+l2.cpp: In member function ‘void l2::insertL3_block(std::string)’:
+l2.cpp:82:8: error: base operand of ‘->’ has non-pointer type ‘cache’
+   Cache->L1->removeL2_block(_bitstring);
+        ^
+l2.cpp:85:7: error: base operand of ‘->’ has non-pointer type ‘cache’
+  Cache->L1->insertL2_block(bitstring);
+       ^
+In file included from l1.h:11:0,
+                 from cache.h:9,
+                 from l3.h:11,
+                 from l3.cpp:2:
+l2.h:13:8: error: ‘cache’ does not name a type
+ extern cache Cache;
+        ^
+In file included from cache.h:9:0,
+                 from l3.h:11,
+                 from l3.cpp:2:
+l1.h:14:8: error: ‘cache’ does not name a type
+ extern cache Cache;
+        ^
+In file included from l3.h:11:0,
+                 from l3.cpp:2:
+cache.h:19:2: error: ‘l3’ does not name a type
+  l3 *L3;
+  ^
+l3.cpp: In member function ‘void l3::access(std::string)’:
+l3.cpp:39:10: error: base operand of ‘->’ has non-pointer type ‘cache’
+     Cache->L2->removeL3_block(_bitstring, Cache);
+          ^
+l3.cpp:43:3: error: ‘L2’ was not declared in this scope
+   L2->insertL3_block(bitstring, Cache);       //Send block down to l2 
+   ^

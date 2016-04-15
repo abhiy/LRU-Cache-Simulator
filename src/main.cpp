@@ -1,15 +1,13 @@
 #include <iostream>
 
-#include "cahce.h"
-#include "simulate.h"
+#include "cache.h"
 
 using namespace std;
 
+cache Cache;
 int main(){
 	string fileName;
 	cin >> fileName;
-
-	cache Cache;
 
 	Cache.simulate(fileName);
 

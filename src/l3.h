@@ -7,8 +7,10 @@
 #include <set>
 #include <list>
 
+#include "func.cpp"
 #include "cache.h"
-#include "func.h"
+
+extern cache Cache;
 
 using namespace std;
 
@@ -18,13 +20,15 @@ private:
 	int _ways;
 	int _blockSize;
 	int _sets;
-	vector< set<string> > _l3(_sets);  
-	vector<list<string> >lru(_sets);    		 
+	vector< set<string> >  _l3;  
+	vector<list<string> > lru;    		 
  public:
-	l2(int size, int sets, int blockSize);
-	void access(char ch, int addr, cache *Cache);
+
+ 	unsigned int missCount;
+	l3(int size, int sets, int blockSize);
+	void access(string bitstring);
 	string runReplacement(int index, string tag);
-	updateList(int index, string tag);
+	void updateList(int index, string tag);
 };
 
 #endif

@@ -5,14 +5,21 @@ using namespace std;
 l3::l3(int size, int sets, int blockSize){
 	_size = size;
 	_sets = sets;
-	_blocksize = blockSize;
+	_blockSize = blockSize;
 	_ways = (size*1024)/(blockSize*sets);
+
+	for(int i = 0; i < sets; i++){
+		set<string> *myset = new set<string>;
+		list<string> *mylist = new list<string>;
+		_l3.push_back(*myset);
+		lru.push_back(*mylist);
+	}
 }
 
 //Called by l2 on a miss
-void l3::access(string bitstring, cache *Cache){
- 	int index = getIndex(bitstring, Cache->L3);      //Index to determine which set to go to
- 	string tag = getTag(bitstring, Cache->L3);		 //The tag
+void l3::access(string bitstring){
+ 	int index = getIndex(bitstring, _sets);      //Index to determine which set to go to
+ 	string tag = getTag(bitstring, _sets);		 //The tag
 
  	set<string>::iterator it;
  	it =_l3[index].find(tag);  						 //Indexing into the l1 cache and finding the tag
@@ -21,7 +28,7 @@ void l3::access(string bitstring, cache *Cache){
  	else  											 //A cache miss!
  	{
  		//A trip down the memory lane
- 		Cache->missCount++;
+ 		missCount++;
  		if(_l3[index].size() < _ways){
  			_l3[index].insert(tag);                  //Inserted the tag into the set
  			lru[index].push_front(tag);              //Inserted the tag into the lru list
@@ -29,27 +36,27 @@ void l3::access(string bitstring, cache *Cache){
  		else
  		{
  			string _bitstring = runReplacement(index, tag);
- 			Cache->L2.removeL3_block(_bitstring);
+ 			Cache->L2->removeL3_block(_bitstring, Cache);
  		}
  	}	 
 
- 	Cache->L2.insertL3_block(bitstring, Cache)       //Send block down to l2 
+ 	L2->insertL3_block(bitstring, Cache);       //Send block down to l2 
 }
 
 //Replaces the lru block with the new and returns the bitstring of that lru
 string l3::runReplacement(int index, string tag){
 	string _lru = lru[index].back();              //Find the lru block
 	lru[index].pop_back();                          
-	_l3[index].remove(mru);						  //Remove lru block from the set 
+	_l3[index].erase(_lru);						  //Remove lru block from the set 
 	_l3[index].insert(tag);                       //Insert tag into the set		
 	lru[index].push_front(tag);					  //Insert tag into the lru list 
 
-	string bitstring = getBitstring(int index, string tag);
+	string bitstring = getBitstring(index, tag, _sets);
 	return bitstring;
 }
 
 //Find tag, bring it to front
 void l3::updateList(int index, string tag){
- 	lru[index].erase(tag);
+ 	lru[index].remove(tag);
  	lru[index].push_front(tag);
 }
